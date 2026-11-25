@@ -17,13 +17,13 @@ esphome:
       - ArduinoJson
       - m5stack/M5Unified@0.2.14
       - m5stack/M5Dial@1.0.3
-      - m5stack/M5GFX@0.2.20
+      - m5stack/M5GFX@0.2.28
 
 external_components:
   - source:
       type: git
-      url: https://github.com/SmartHome-yourself/m5-dial-for-esphome/
-      ref: main
+      url: https://github.com/Fabstunes/m5-dial-for-esphome
+      ref: esphome-2026.11
     components: [shys_m5_dial]
 
 dashboard_import:

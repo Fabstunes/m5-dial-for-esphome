@@ -17,11 +17,11 @@ namespace esphome
 
                 void updateEntity(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("homeassistant.update_entity");
+                    resp.service = ProgmemStringRef(StringRef("homeassistant.update_entity"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "update Entity: %s", entity.c_str());
                 }
@@ -30,18 +30,18 @@ namespace esphome
 
                 void turnLightOn(const std::string& entity, int brightness = -1, int colorValue = -1){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("light.turn_on");
+                    resp.service = ProgmemStringRef(StringRef("light.turn_on"));
 
                     int data_count = 1 + (brightness >= 0 ? 1 : 0);
                     resp.data.init(data_count);
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     if(brightness >= 0){
                         auto &kv2 = resp.data.emplace_back();
-                        kv2.key = StringRef("brightness_pct");
-                        kv2.value = StringRef(to_string(brightness).c_str());
+                        kv2.key = ProgmemStringRef(StringRef("brightness_pct"));
+                        kv2.value = ProgmemStringRef(StringRef(to_string(brightness).c_str()));
                         ESP_LOGD("HA_API", "Turn ON %s with brightness: %i", entity.c_str(), brightness);
                     }
 
@@ -49,11 +49,11 @@ namespace esphome
                         // Verwende data_template mit Home Assistant Template-Syntax
                         resp.data_template.init(1);
                         auto &kv3 = resp.data_template.emplace_back();
-                        kv3.key = StringRef("hs_color");
+                        kv3.key = ProgmemStringRef(StringRef("hs_color"));
                         // Template: {{(hue,saturation)|list}} wird zu echtem Array
                         char colorTemplate[32];
                         snprintf(colorTemplate, sizeof(colorTemplate), "{{(%d,100)|list}}", colorValue);
-                        kv3.value = StringRef(colorTemplate);
+                        kv3.value = ProgmemStringRef(StringRef(colorTemplate));
                         ESP_LOGI("HA_API", "Turn ON %s with color template: %s", entity.c_str(), colorTemplate);
                     }
 
@@ -63,19 +63,19 @@ namespace esphome
 
                 void turnLightOnWhite(const std::string& entity, int kelvin = -1){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("light.turn_on");
+                    resp.service = ProgmemStringRef(StringRef("light.turn_on"));
                     
                     int data_count = (kelvin >= 0) ? 2 : 1;
                     resp.data.init(data_count);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     if(kelvin >= 0){
                         auto &kv2 = resp.data.emplace_back();
-                        kv2.key = StringRef("kelvin");
-                        kv2.value = StringRef(to_string(kelvin).c_str());
+                        kv2.key = ProgmemStringRef(StringRef("kelvin"));
+                        kv2.value = ProgmemStringRef(StringRef(to_string(kelvin).c_str()));
                         ESP_LOGD("HA_API", "Turn ON %s with kelvin: %i", entity.c_str(), kelvin);
                     }
 
@@ -86,22 +86,22 @@ namespace esphome
 
                 void turnLightOff(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("light.turn_off");
+                    resp.service = ProgmemStringRef(StringRef("light.turn_off"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "turn OFF Light: %s", entity.c_str());
                 }
 
                 void toggleLight(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("light.toggle");
+                    resp.service = ProgmemStringRef(StringRef("light.toggle"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "toggle Light: %s", entity.c_str());
                 }
@@ -113,38 +113,38 @@ namespace esphome
 
                 void turnClimateOn(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("climate.turn_on");
+                    resp.service = ProgmemStringRef(StringRef("climate.turn_on"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "turn ON Climate: %s", entity.c_str());
                 }
 
                 void turnClimateOff(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("climate.turn_off");
+                    resp.service = ProgmemStringRef(StringRef("climate.turn_off"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "turn OFF Climate: %s", entity.c_str());
                 }
 
                 void setClimateTemperature(const std::string& entity, int value){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("climate.set_temperature");
+                    resp.service = ProgmemStringRef(StringRef("climate.set_temperature"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("temperature");
-                    kv2.value = StringRef(to_string(value).c_str());
+                    kv2.key = ProgmemStringRef(StringRef("temperature"));
+                    kv2.value = ProgmemStringRef(StringRef(to_string(value).c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Climate set Temperature: %i on %s", value, entity.c_str());
@@ -152,16 +152,16 @@ namespace esphome
 
                 void setClimateFanMode(const std::string& entity, const std::string& mode){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("climate.set_fan_mode");
+                    resp.service = ProgmemStringRef(StringRef("climate.set_fan_mode"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("fan_mode");
-                    kv2.value = StringRef(mode.c_str());
+                    kv2.key = ProgmemStringRef(StringRef("fan_mode"));
+                    kv2.value = ProgmemStringRef(StringRef(mode.c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Climate set Fan-Mode: %s on %s", mode.c_str(), entity.c_str());
@@ -171,16 +171,16 @@ namespace esphome
 
                 void setCoverPosition(const std::string& entity, int value){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("cover.set_cover_position");
+                    resp.service = ProgmemStringRef(StringRef("cover.set_cover_position"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("position");
-                    kv2.value = StringRef(to_string(value).c_str());
+                    kv2.key = ProgmemStringRef(StringRef("position"));
+                    kv2.value = ProgmemStringRef(StringRef(to_string(value).c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Cover set Position: %i on %s", value, entity.c_str());
@@ -193,33 +193,33 @@ namespace esphome
 
                 void turnSwitchOn(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("switch.turn_on");
+                    resp.service = ProgmemStringRef(StringRef("switch.turn_on"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "turn ON Switch: %s", entity.c_str());
                 }
 
                 void turnSwitchOff(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("switch.turn_off");
+                    resp.service = ProgmemStringRef(StringRef("switch.turn_off"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "turn OFF Switch: %s", entity.c_str());
                 }
 
                 void toggleSwitch(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("switch.toggle");
+                    resp.service = ProgmemStringRef(StringRef("switch.toggle"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "toggle Switch: %s", entity.c_str());
                 }
@@ -231,49 +231,49 @@ namespace esphome
 
                 void turnFanOn(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("fan.turn_on");
+                    resp.service = ProgmemStringRef(StringRef("fan.turn_on"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "turn ON Fan: %s", entity.c_str());
                 }
 
                 void turnFanOff(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("fan.turn_off");
+                    resp.service = ProgmemStringRef(StringRef("fan.turn_off"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "turn OFF Fan: %s", entity.c_str());
                 }
 
                 void toggleFan(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("fan.toggle");
+                    resp.service = ProgmemStringRef(StringRef("fan.toggle"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "toggle Fan: %s", entity.c_str());
                 }
 
                 void setFanDirection(const std::string& entity, const char* direction){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("fan.set_direction");
+                    resp.service = ProgmemStringRef(StringRef("fan.set_direction"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("direction");
-                    kv2.value = StringRef(direction);
+                    kv2.key = ProgmemStringRef(StringRef("direction"));
+                    kv2.value = ProgmemStringRef(StringRef(direction));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Fan set Direction: %s on %s", direction, entity.c_str());
@@ -281,16 +281,16 @@ namespace esphome
 
                 void setFanSpeed(const std::string& entity, int value){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("fan.set_percentage");
+                    resp.service = ProgmemStringRef(StringRef("fan.set_percentage"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("percentage");
-                    kv2.value = StringRef(to_string(value).c_str());
+                    kv2.key = ProgmemStringRef(StringRef("percentage"));
+                    kv2.value = ProgmemStringRef(StringRef(to_string(value).c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Fan set Speed: %i on %s", value, entity.c_str());
@@ -304,16 +304,16 @@ namespace esphome
 
                 void setMediaPlayerVolume(const std::string& entity, int value){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("media_player.volume_set");
+                    resp.service = ProgmemStringRef(StringRef("media_player.volume_set"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("volume_level");
-                    kv2.value = StringRef(to_string((float)value/100).c_str());
+                    kv2.key = ProgmemStringRef(StringRef("volume_level"));
+                    kv2.value = ProgmemStringRef(StringRef(to_string((float)value/100).c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "MediaPlayer set Volume: %i on %s", value, entity.c_str());
@@ -321,64 +321,64 @@ namespace esphome
 
                 void stopMediaPlayer(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("media_player.media_stop");
+                    resp.service = ProgmemStringRef(StringRef("media_player.media_stop"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "MediaPlayer Stop: %s", entity.c_str());
                 }
 
                 void setNextTrackOnMediaPlayer(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("media_player.media_next_track");
+                    resp.service = ProgmemStringRef(StringRef("media_player.media_next_track"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "MediaPlayer next Track: %s", entity.c_str());
                 }
 
                 void setPreviousTrackOnMediaPlayer(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("media_player.media_previous_track");
+                    resp.service = ProgmemStringRef(StringRef("media_player.media_previous_track"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "MediaPlayer previous Track: %s", entity.c_str());
                 }
 
                 void playPauseMediaPlayer(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("media_player.media_play_pause");
+                    resp.service = ProgmemStringRef(StringRef("media_player.media_play_pause"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "MediaPlayer play/pause: %s", entity.c_str());
                 }
 
                 void playMediaOnMediaPlayer(const std::string& entity, const std::string& media_content_id, const std::string& media_content_type){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("media_player.play_media");
+                    resp.service = ProgmemStringRef(StringRef("media_player.play_media"));
                     resp.data.init(3);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("media_content_id");
-                    kv2.value = StringRef(media_content_id.c_str());
+                    kv2.key = ProgmemStringRef(StringRef("media_content_id"));
+                    kv2.value = ProgmemStringRef(StringRef(media_content_id.c_str()));
 
                     auto &kv3 = resp.data.emplace_back();
-                    kv3.key = StringRef("media_content_type");
-                    kv3.value = StringRef(media_content_type.c_str());
+                    kv3.key = ProgmemStringRef(StringRef("media_content_type"));
+                    kv3.value = ProgmemStringRef(StringRef(media_content_type.c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "MediaPlayer play_media: %s on %s", media_content_id.c_str(), entity.c_str());
@@ -386,11 +386,11 @@ namespace esphome
 
                 void refreshMediaPlayer(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("homeassistant.update_entity");
+                    resp.service = ProgmemStringRef(StringRef("homeassistant.update_entity"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "MediaPlayer refresh: %s", entity.c_str());
                 }
@@ -403,33 +403,33 @@ namespace esphome
 
                 void openLock(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("lock.open");
+                    resp.service = ProgmemStringRef(StringRef("lock.open"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Lock open: %s", entity.c_str());
                 }
 
                 void lockLock(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("lock.lock");
+                    resp.service = ProgmemStringRef(StringRef("lock.lock"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Lock lock: %s", entity.c_str());
                 }
 
                 void unlockLock(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("lock.unlock");
+                    resp.service = ProgmemStringRef(StringRef("lock.unlock"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Lock unlock: %s", entity.c_str());
                 }
@@ -443,16 +443,16 @@ namespace esphome
                                          "input_number.set_value" : "number.set_value";
                     
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef(service);
+                    resp.service = ProgmemStringRef(StringRef(service));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("value");
-                    kv2.value = StringRef(to_string(value).c_str());
+                    kv2.key = ProgmemStringRef(StringRef("value"));
+                    kv2.value = ProgmemStringRef(StringRef(to_string(value).c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Number set Value: %i on %s", value, entity.c_str());
@@ -467,12 +467,12 @@ namespace esphome
                 // Timer start without duration (uses timer's default duration)
                 void timerStart(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("timer.start");
+                    resp.service = ProgmemStringRef(StringRef("timer.start"));
                     resp.data.init(1);
                     
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Timer start (default duration) on %s", entity.c_str());
@@ -481,16 +481,16 @@ namespace esphome
                 // Timer start with specific duration
                 void timerStart(const std::string& entity, int duration){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("timer.start");
+                    resp.service = ProgmemStringRef(StringRef("timer.start"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("duration");
-                    kv2.value = StringRef(to_string(duration).c_str());
+                    kv2.key = ProgmemStringRef(StringRef("duration"));
+                    kv2.value = ProgmemStringRef(StringRef(to_string(duration).c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Timer start: %i on %s", duration, entity.c_str());
@@ -498,49 +498,49 @@ namespace esphome
 
                 void timerPause(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("timer.pause");
+                    resp.service = ProgmemStringRef(StringRef("timer.pause"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Timer pause: %s", entity.c_str());
                 }
 
                 void timerCancle(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("timer.cancle");
+                    resp.service = ProgmemStringRef(StringRef("timer.cancle"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Timer cancle: %s", entity.c_str());
                 }
 
                 void timerFinish(const std::string& entity){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("timer.finish");
+                    resp.service = ProgmemStringRef(StringRef("timer.finish"));
                     resp.data.init(1);
                     auto &kv = resp.data.emplace_back();
-                    kv.key = StringRef("entity_id");
-                    kv.value = StringRef(entity.c_str());
+                    kv.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv.value = ProgmemStringRef(StringRef(entity.c_str()));
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Timer finish: %s", entity.c_str());
                 }
 
                 void timerChange(const std::string& entity, int duration){
                     esphome::api::HomeassistantActionRequest resp;
-                    resp.service = StringRef("timer.change");
+                    resp.service = ProgmemStringRef(StringRef("timer.change"));
                     resp.data.init(2);
                     
                     auto &kv1 = resp.data.emplace_back();
-                    kv1.key = StringRef("entity_id");
-                    kv1.value = StringRef(entity.c_str());
+                    kv1.key = ProgmemStringRef(StringRef("entity_id"));
+                    kv1.value = ProgmemStringRef(StringRef(entity.c_str()));
 
                     auto &kv2 = resp.data.emplace_back();
-                    kv2.key = StringRef("duration");
-                    kv2.value = StringRef(to_string(duration).c_str());
+                    kv2.key = ProgmemStringRef(StringRef("duration"));
+                    kv2.value = ProgmemStringRef(StringRef(to_string(duration).c_str()));
 
                     api::global_api_server->send_homeassistant_action(resp);
                     ESP_LOGD("HA_API", "Timer change: %i on %s", duration, entity.c_str());
